@@ -4,6 +4,8 @@ import './styles.css';
 
 const navItems = ['Dashboard', 'Goals', 'Investments', 'AI Advisor', 'Credit', 'Settings', 'Help'];
 
+/* ---------- Icons ---------- */
+
 function SearchIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -32,18 +34,120 @@ function UploadIcon() {
   );
 }
 
+function DollarIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="metric-icon-svg">
+      <path d="M12 3v18" />
+      <path d="M16 7c0-1.7-1.8-3-4-3s-4 1.3-4 3 1.8 3 4 3 4 1.3 4 3-1.8 3-4 3-4-1.3-4-3" />
+    </svg>
+  );
+}
+
+function PulseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="metric-icon-svg">
+      <path d="M3 12h4l2-6 4 12 2-6h6" />
+    </svg>
+  );
+}
+
+function TrendIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="metric-icon-svg">
+      <path d="M3 17 9 11l4 4 8-8" />
+      <path d="M14 7h7v7" />
+    </svg>
+  );
+}
+
+function WalletIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="metric-icon-svg">
+      <rect x="3" y="6" width="18" height="13" rx="2" />
+      <path d="M16 13h2" />
+      <path d="M3 9h14" />
+    </svg>
+  );
+}
+
+function PlusIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="action-icon-svg">
+      <path d="M12 5v14" />
+      <path d="M5 12h14" />
+    </svg>
+  );
+}
+
+function SwapIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="action-icon-svg">
+      <path d="M7 4v16" />
+      <path d="m3 8 4-4 4 4" />
+      <path d="M17 20V4" />
+      <path d="m21 16-4 4-4-4" />
+    </svg>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="action-icon-svg">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" />
+    </svg>
+  );
+}
+
+function ArrowUpIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="action-icon-svg">
+      <path d="M3 17 9 11l4 4 8-8" />
+      <path d="M14 7h7v7" />
+    </svg>
+  );
+}
+
+function DocIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="action-icon-svg">
+      <path d="M7 3h8l4 4v14H7z" />
+      <path d="M15 3v4h4" />
+      <path d="M10 12h6" />
+      <path d="M10 16h6" />
+    </svg>
+  );
+}
+
+function ChatIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="action-icon-svg">
+      <path d="M5 5h14v11H9l-4 4z" />
+    </svg>
+  );
+}
+
+/* ---------- Top Nav ---------- */
+
 function TopNav({ active, onNavigate }) {
   return (
     <header className="topbar">
-      <button className="brand" onClick={() => onNavigate('credit')}>FinanceHub</button>
+      <button className="brand" onClick={() => onNavigate('dashboard')}>FinanceHub</button>
       <nav className="nav-links" aria-label="Main navigation">
         {navItems.map((item) => {
-          const isActive = active === item || (active === 'Credit & Debt' && item === 'Credit');
+          const isActive =
+            active === item ||
+            (active === 'Credit & Debt' && item === 'Credit');
           return (
             <button
               key={item}
               className={isActive ? 'nav-link active' : 'nav-link'}
-              onClick={() => item === 'Settings' ? onNavigate('settings') : onNavigate('credit')}
+              onClick={() => {
+                if (item === 'Dashboard') onNavigate('dashboard');
+                else if (item === 'Settings') onNavigate('settings');
+                else if (item === 'Credit') onNavigate('credit');
+                else onNavigate('dashboard');
+              }}
             >
               {item === 'Credit' && active === 'Credit & Debt' ? 'Credit & Debt' : item}
             </button>
@@ -60,6 +164,94 @@ function TopNav({ active, onNavigate }) {
     </header>
   );
 }
+
+/* ---------- Dashboard ---------- */
+
+function PortfolioCard({ label, value, detail, tone, icon }) {
+  return (
+    <section className="portfolio-card">
+      <div className="portfolio-card-head">
+        <h3>{label}</h3>
+        <div className="metric-icon-chip">{icon}</div>
+      </div>
+      <div className="portfolio-value">{value}</div>
+      <p className={tone ? `portfolio-detail ${tone}` : 'portfolio-detail'}>{detail}</p>
+    </section>
+  );
+}
+
+function QuickActionButton({ icon, label, sub, onClick }) {
+  return (
+    <button className="quick-action" onClick={onClick}>
+      <div className="quick-action-icon">{icon}</div>
+      <div className="quick-action-label">{label}</div>
+      <div className="quick-action-sub">{sub}</div>
+    </button>
+  );
+}
+
+function DashboardPage({ onNavigate }) {
+  // Each Quick Action is wired to a route name. The actual sub-pages
+  // are not implemented yet — clicking just updates the URL hash so
+  // future pages can be plugged into the router below.
+  const handleAction = (route) => onNavigate(route);
+
+  return (
+    <>
+      <TopNav active="Dashboard" onNavigate={onNavigate} />
+      <main className="page dashboard-page">
+        <section className="welcome-panel">
+          <h1>Welcome back, Nishant</h1>
+          <p className="welcome-sub">Here's your portfolio overview for March 8, 2026</p>
+
+          <div className="portfolio-grid">
+            <PortfolioCard
+              label="Total Portfolio Value"
+              value="$1,247,382"
+              detail="+3.5% ↗"
+              tone="positive"
+              icon={<DollarIcon />}
+            />
+            <PortfolioCard
+              label="Today's Change"
+              value="+ $8,432"
+              detail="+0.68% ↗ Since market open"
+              tone="positive"
+              icon={<PulseIcon />}
+            />
+            <PortfolioCard
+              label="Total Return"
+              value="+ $189,240"
+              detail="+17.9% ↗ All time"
+              tone="positive"
+              icon={<TrendIcon />}
+            />
+            <PortfolioCard
+              label="Cash Available"
+              value="$52,180"
+              detail="4.2% of portfolio · Ready to invest"
+              icon={<WalletIcon />}
+            />
+          </div>
+        </section>
+
+        <section className="quick-actions-panel">
+          <h2>Quick Actions</h2>
+          <div className="quick-actions-grid">
+            <QuickActionButton icon={<PlusIcon />}    label="Add Funds"   sub="Deposit money"      onClick={() => handleAction('add-funds')} />
+            <QuickActionButton icon={<SwapIcon />}    label="Trade"       sub="Buy or sell"        onClick={() => handleAction('trade')} />
+            <QuickActionButton icon={<ClockIcon />}   label="Rebalance"   sub="Optimize portfolio" onClick={() => handleAction('rebalance')} />
+            <QuickActionButton icon={<ArrowUpIcon />} label="Invest More" sub="Auto-invest"        onClick={() => handleAction('invest-more')} />
+            <QuickActionButton icon={<DocIcon />}     label="Reports"     sub="View statements"    onClick={() => handleAction('reports')} />
+            <QuickActionButton icon={<ChatIcon />}    label="Ask AI"      sub="Get advice"         onClick={() => handleAction('ask-ai')} />
+          </div>
+        </section>
+      </main>
+    </>
+  );
+}
+
+/* ---------- Existing Credit Page (unchanged) ---------- */
 
 function MetricCard({ label, value, detail, tone }) {
   return (
@@ -199,6 +391,8 @@ function CreditPage({ onNavigate }) {
   );
 }
 
+/* ---------- Settings Page (unchanged) ---------- */
+
 function ProfilePhotoCard() {
   return (
     <section className="panel settings-card photo-card">
@@ -261,15 +455,34 @@ function SettingsPage({ onNavigate }) {
   );
 }
 
+/* ---------- Router ----------
+   Quick-Action routes ('add-funds', 'trade', 'rebalance', 'invest-more',
+   'reports', 'ask-ai') are valid hash targets but have no page component
+   yet. The router falls through to the dashboard for unknown values.
+   To wire one up later, build a component and add a case to the switch. */
+
+const VALID_PAGES = ['dashboard', 'credit', 'settings'];
+
 function App() {
-  const initialPage = useMemo(() => window.location.hash === '#settings' ? 'settings' : 'credit', []);
+  const initialPage = useMemo(() => {
+    const hash = window.location.hash.replace('#', '');
+    return VALID_PAGES.includes(hash) ? hash : 'dashboard';
+  }, []);
+
   const [page, setPage] = useState(initialPage);
+
   const navigate = (next) => {
-    setPage(next);
-    window.location.hash = next === 'settings' ? 'settings' : 'credit';
+    setPage(VALID_PAGES.includes(next) ? next : 'dashboard');
+    window.location.hash = next;
+    window.scrollTo(0, 0);
   };
 
-  return page === 'settings' ? <SettingsPage onNavigate={navigate} /> : <CreditPage onNavigate={navigate} />;
+  switch (page) {
+    case 'credit':   return <CreditPage onNavigate={navigate} />;
+    case 'settings': return <SettingsPage onNavigate={navigate} />;
+    case 'dashboard':
+    default:         return <DashboardPage onNavigate={navigate} />;
+  }
 }
 
 createRoot(document.getElementById('root')).render(<App />);
