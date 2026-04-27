@@ -835,3 +835,182 @@ h1 {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ---------- Portfolio Performance Page ---------- */
+
+.portfolio-page {
+  max-width: 1350px;
+  padding: 26px 22px 42px;
+}
+
+.perf-panel {
+  margin-bottom: 22px;
+  padding: 28px 30px 24px;
+}
+
+.perf-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.perf-title {
+  color: #111111;
+  font-size: 20px;
+  margin: 0 0 6px;
+}
+
+.perf-sub {
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* range tabs (1D / 1W / 1M / 3M / 6M / 1Y / ALL) */
+
+.range-tabs {
+  background: #f1f3f7;
+  border: 1px solid #e3e6ec;
+  border-radius: 10px;
+  display: inline-flex;
+  gap: 2px;
+  padding: 4px;
+}
+
+.range-tab {
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  color: #6b7280;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  height: 30px;
+  padding: 0 12px;
+}
+
+.range-tab.active {
+  background: #2f3848;
+  color: #ffffff;
+}
+
+/* chart */
+
+.perf-chart {
+  display: block;
+  font-family: inherit;
+  font-size: 12px;
+  height: auto;
+  margin: 6px 0 4px;
+  width: 100%;
+}
+
+.perf-grid line {
+  stroke: #eef0f4;
+  stroke-width: 1;
+}
+
+.perf-axis {
+  stroke: #cfd4dc;
+  stroke-width: 1;
+}
+
+.perf-y-labels text {
+  fill: #9aa3b0;
+  text-anchor: end;
+}
+
+.perf-month {
+  fill: #9aa3b0;
+  text-anchor: middle;
+}
+
+.perf-portfolio {
+  fill: none;
+  stroke: #3465f4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.2;
+}
+
+.perf-benchmark {
+  fill: none;
+  stroke: #9aa3b0;
+  stroke-dasharray: 6 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+/* legend */
+
+.perf-legend {
+  align-items: center;
+  color: #4b5568;
+  display: flex;
+  font-size: 14px;
+  font-weight: 600;
+  gap: 28px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.perf-legend-item {
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
+}
+
+.perf-legend-dot {
+  border-radius: 999px;
+  display: inline-block;
+  height: 8px;
+  width: 18px;
+}
+
+.perf-legend-dot.portfolio {
+  background: #3465f4;
+}
+
+.perf-legend-dot.benchmark {
+  background: #9aa3b0;
+}
+
+/* AI Financial Advisor card on this page reuses .recommendation-box */
+
+.perf-recommendation {
+  padding: 0;
+}
+
+.perf-recommendation .recommendation-box {
+  border-radius: 10px;
+  margin: 0;
+}
+
+.ai-title {
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 800;
+  margin: 0 0 8px;
+}
+
+/* responsive */
+
+@media (max-width: 1100px) {
+  .perf-header {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 760px) {
+  .range-tabs {
+    flex-wrap: wrap;
+  }
+
+  .perf-legend {
+    gap: 18px;
+  }
+}

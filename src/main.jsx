@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
-const navItems = ['Dashboard', 'Goals', 'Investments', 'AI Advisor', 'Credit', 'Settings', 'Help'];
+const navItems = ['Dashboard', 'Portfolio Performance', 'Goals', 'Investments', 'AI Advisor', 'Credit', 'Settings', 'Help'];
 
 /* ---------- Icons ---------- */
 
@@ -144,6 +144,7 @@ function TopNav({ active, onNavigate }) {
               className={isActive ? 'nav-link active' : 'nav-link'}
               onClick={() => {
                 if (item === 'Dashboard') onNavigate('dashboard');
+                else if (item === 'Portfolio Performance') onNavigate('portfolio');
                 else if (item === 'Settings') onNavigate('settings');
                 else if (item === 'Credit') onNavigate('credit');
                 else onNavigate('dashboard');
@@ -244,6 +245,131 @@ function DashboardPage({ onNavigate }) {
             <QuickActionButton icon={<ArrowUpIcon />} label="Invest More" sub="Auto-invest"        onClick={() => handleAction('invest-more')} />
             <QuickActionButton icon={<DocIcon />}     label="Reports"     sub="View statements"    onClick={() => handleAction('reports')} />
             <QuickActionButton icon={<ChatIcon />}    label="Ask AI"      sub="Get advice"         onClick={() => handleAction('ask-ai')} />
+          </div>
+        </section>
+      </main>
+    </>
+  );
+}
+
+/* ---------- Portfolio Performance Page ---------- */
+
+function PortfolioChart() {
+  // 12 monthly anchor points along x-axis (Jan -> Dec).
+  // Two flat-ish lines hovering near the $1.2M mark, matching the screenshot.
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  // y-axis tick labels (top to bottom) and their pixel y positions in the chart area.
+  const yTicks = [
+    { label: '$1200K', y: 40 },
+    { label: '$1100K', y: 100 },
+    { label: '$1000K', y: 160 },
+    { label: '$900K',  y: 220 },
+    { label: '$800K',  y: 280 },
+    { label: '$700K',  y: 340 },
+    { label: '$600K',  y: 400 }
+  ];
+
+  // Subtle wave for the portfolio line (blue), slightly trending up.
+  const portfolioY = [78, 80, 76, 74, 72, 70, 68, 66, 64, 62, 60, 58];
+  // S&P 500 line (gray, dashed) — sits a hair below portfolio.
+  const benchmarkY = [82, 83, 80, 79, 77, 75, 74, 72, 70, 68, 66, 64];
+
+  // X positions across the plot area (left padding 60, right padding 20, width 1080).
+  const xs = months.map((_, i) => 60 + i * (1080 / 11));
+
+  const portfolioPoints = xs.map((x, i) => `${x},${portfolioY[i]}`).join(' ');
+  const benchmarkPoints = xs.map((x, i) => `${x},${benchmarkY[i]}`).join(' ');
+
+  return (
+    <svg className="perf-chart" viewBox="0 0 1140 470" role="img" aria-label="Portfolio performance vs S&P 500">
+      {/* horizontal grid + y-axis labels */}
+      <g className="perf-grid">
+        {yTicks.map((t) => (
+          <line key={`h-${t.y}`} x1="60" y1={t.y} x2="1140" y2={t.y} />
+        ))}
+      </g>
+      <g className="perf-y-labels">
+        {yTicks.map((t) => (
+          <text key={`yl-${t.y}`} x="50" y={t.y + 4}>{t.label}</text>
+        ))}
+      </g>
+
+      {/* x-axis baseline */}
+      <line className="perf-axis" x1="60" y1="400" x2="1140" y2="400" />
+
+      {/* benchmark line — gray dashed */}
+      <polyline className="perf-benchmark" points={benchmarkPoints} />
+      {/* portfolio line — blue solid */}
+      <polyline className="perf-portfolio" points={portfolioPoints} />
+
+      {/* x-axis month labels */}
+      {months.map((m, i) => (
+        <text className="perf-month" key={m} x={xs[i]} y="425">{m}</text>
+      ))}
+    </svg>
+  );
+}
+
+function RangeTabs() {
+  const ranges = ['1D', '1W', '1M', '3M', '6M', '1Y', 'ALL'];
+  const active = '1Y';
+  return (
+    <div className="range-tabs" role="tablist" aria-label="Time range">
+      {ranges.map((r) => (
+        <button
+          key={r}
+          className={r === active ? 'range-tab active' : 'range-tab'}
+          role="tab"
+          aria-selected={r === active}
+        >
+          {r}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function PortfolioPerformancePage({ onNavigate }) {
+  return (
+    <>
+      <TopNav active="Portfolio Performance" onNavigate={onNavigate} />
+      <main className="page portfolio-page">
+        <section className="panel perf-panel">
+          <div className="perf-header">
+            <div>
+              <h2 className="perf-title">Portfolio Performance</h2>
+              <p className="perf-sub">12-month performance vs S&amp;P 500 benchmark</p>
+            </div>
+            <RangeTabs />
+          </div>
+
+          <PortfolioChart />
+
+          <div className="perf-legend">
+            <span className="perf-legend-item">
+              <span className="perf-legend-dot portfolio" />
+              Your Portfolio
+            </span>
+            <span className="perf-legend-item">
+              <span className="perf-legend-dot benchmark" />
+              S&amp;P 500
+            </span>
+          </div>
+        </section>
+
+        <section className="panel recommendation perf-recommendation">
+          <div className="recommendation-box">
+            <div className="ai-badge">AI</div>
+            <div>
+              <h3 className="ai-title">AI Financial Advisor</h3>
+              <p>Based on your portfolio performance and market conditions, I've identified 3 key recommendations for you:</p>
+              <ul>
+                <li>Your portfolio is well-diversified across 8 sectors</li>
+                <li>Expected annual return: 8.5% – 11.2% (90% confidence)</li>
+                <li>Tax-loss harvesting opportunities: $3,400 potential savings</li>
+              </ul>
+            </div>
           </div>
         </section>
       </main>
@@ -461,7 +587,7 @@ function SettingsPage({ onNavigate }) {
    yet. The router falls through to the dashboard for unknown values.
    To wire one up later, build a component and add a case to the switch. */
 
-const VALID_PAGES = ['dashboard', 'credit', 'settings'];
+const VALID_PAGES = ['dashboard', 'portfolio', 'credit', 'settings'];
 
 function App() {
   const initialPage = useMemo(() => {
@@ -478,10 +604,11 @@ function App() {
   };
 
   switch (page) {
-    case 'credit':   return <CreditPage onNavigate={navigate} />;
-    case 'settings': return <SettingsPage onNavigate={navigate} />;
+    case 'portfolio': return <PortfolioPerformancePage onNavigate={navigate} />;
+    case 'credit':    return <CreditPage onNavigate={navigate} />;
+    case 'settings':  return <SettingsPage onNavigate={navigate} />;
     case 'dashboard':
-    default:         return <DashboardPage onNavigate={navigate} />;
+    default:          return <DashboardPage onNavigate={navigate} />;
   }
 }
 
