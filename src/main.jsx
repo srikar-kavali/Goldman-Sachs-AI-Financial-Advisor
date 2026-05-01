@@ -1,8 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
+import TradingPage from './pages/TradingPage';
+import InvestmentAdvicePage from './pages/InvestmentAdvicePage';
 
-const navItems = ['Dashboard', 'Portfolio Performance', 'Goals', 'Investments', 'AI Advisor', 'Credit', 'Settings', 'Help'];
+const navItems = ['Dashboard', 'Portfolio Performance', 'Goals', 'Investments', 'Trading', 'AI Advisor', 'Credit', 'Settings', 'Help'];
+
 
 /* ---------- Icons ---------- */
 
@@ -130,40 +133,42 @@ function ChatIcon() {
 /* ---------- Top Nav ---------- */
 
 function TopNav({ active, onNavigate }) {
-  return (
-    <header className="topbar">
-      <button className="brand" onClick={() => onNavigate('dashboard')}>FinanceHub</button>
-      <nav className="nav-links" aria-label="Main navigation">
-        {navItems.map((item) => {
-          const isActive =
-            active === item ||
-            (active === 'Credit & Debt' && item === 'Credit');
-          return (
-            <button
-              key={item}
-              className={isActive ? 'nav-link active' : 'nav-link'}
-              onClick={() => {
-                if (item === 'Dashboard') onNavigate('dashboard');
-                else if (item === 'Portfolio Performance') onNavigate('portfolio');
-                else if (item === 'Settings') onNavigate('settings');
-                else if (item === 'Credit') onNavigate('credit');
-                else onNavigate('dashboard');
-              }}
-            >
-              {item === 'Credit' && active === 'Credit & Debt' ? 'Credit & Debt' : item}
-            </button>
-          );
-        })}
-      </nav>
-      <div className="top-actions">
-        <div className="search">
-          <SearchIcon />
-          <span>Search</span>
-        </div>
-        <button className="avatar-button" aria-label="Profile"><UserIcon /></button>
-      </div>
-    </header>
-  );
+    return (
+        <header className="topbar">
+            <button className="brand" onClick={() => onNavigate('dashboard')}>FinanceHub</button>
+            <nav className="nav-links" aria-label="Main navigation">
+                {navItems.map((item) => {
+                    const isActive =
+                        active === item ||
+                        (active === 'Credit & Debt' && item === 'Credit');
+                    return (
+                        <button
+                            key={item}
+                            className={isActive ? 'nav-link active' : 'nav-link'}
+                            onClick={() => {
+                                if (item === 'Dashboard')              onNavigate('dashboard');
+                                else if (item === 'Portfolio Performance') onNavigate('portfolio');
+                                else if (item === 'Trading')           onNavigate('trading');
+                                else if (item === 'AI Advisor')        onNavigate('investment-advice');
+                                else if (item === 'Settings')          onNavigate('settings');
+                                else if (item === 'Credit')            onNavigate('credit');
+                                else onNavigate('dashboard');
+                            }}
+                        >
+                            {item === 'Credit' && active === 'Credit & Debt' ? 'Credit & Debt' : item}
+                        </button>
+                    );
+                })}
+            </nav>
+            <div className="top-actions">
+                <div className="search">
+                    <SearchIcon />
+                    <span>Search</span>
+                </div>
+                <button className="avatar-button" aria-label="Profile"><UserIcon /></button>
+            </div>
+        </header>
+    );
 }
 
 /* ---------- Dashboard ---------- */
@@ -587,7 +592,7 @@ function SettingsPage({ onNavigate }) {
    yet. The router falls through to the dashboard for unknown values.
    To wire one up later, build a component and add a case to the switch. */
 
-const VALID_PAGES = ['dashboard', 'portfolio', 'credit', 'settings'];
+const VALID_PAGES = ['dashboard', 'portfolio', 'credit', 'settings', 'trading', 'investment-advice'];
 
 function App() {
   const initialPage = useMemo(() => {
@@ -604,6 +609,8 @@ function App() {
   };
 
   switch (page) {
+      case 'trading':           return <TradingPage onNavigate={navigate} />;
+      case 'investment-advice': return <InvestmentAdvicePage onNavigate={navigate} />;
     case 'portfolio': return <PortfolioPerformancePage onNavigate={navigate} />;
     case 'credit':    return <CreditPage onNavigate={navigate} />;
     case 'settings':  return <SettingsPage onNavigate={navigate} />;
