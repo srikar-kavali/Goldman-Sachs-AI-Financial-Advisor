@@ -609,8 +609,8 @@ function App() {
   };
 
   switch (page) {
-      case 'trading':           return <TradingPage onNavigate={navigate} />;
-      case 'investment-advice': return <InvestmentAdvicePage onNavigate={navigate} />;
+      case 'trading':           return <TradingPage onNavigate={navigate} TopNav={TopNav} />;
+      case 'investment-advice': return <InvestmentAdvicePage onNavigate={navigate} TopNav={TopNav} />;
     case 'portfolio': return <PortfolioPerformancePage onNavigate={navigate} />;
     case 'credit':    return <CreditPage onNavigate={navigate} />;
     case 'settings':  return <SettingsPage onNavigate={navigate} />;
